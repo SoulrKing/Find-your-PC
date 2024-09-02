@@ -1,8 +1,8 @@
 const endpoint = {
-    "pc": "PC AMD COM RTX DE 2000 reais",
+    "pc": "PC AMD COM RTX DE 4000 reais",
     "cpu": "Ryzen 5 5500",
     "gpu": "RTX 4060",
-    "preço": "2200",
+    "preço": "4000",
     "placa mãe": "b550m"
 }
 const pcs = [endpoint]
@@ -42,7 +42,7 @@ function findmatches(wordtomatch, pcs) {
 
     })
 }
-console.log(findmatches("amd", pcs))
+// console.log(findmatches("amd", pcs))
 
 // esse tambem faz parte do fech do banco de dados do servidor
 /*
@@ -52,3 +52,33 @@ console.log(findmatches("amd", pcs))
         }
 })
 */
+
+function displaymatches() {
+    // console.log(this.value)
+    const matcharray = findmatches(this.value, pcs)
+    //console.log(matcharray) 
+
+    const htmls = matcharray.map(configs => {
+
+        const regex = new RegExp(this.value, "gi")
+        const typecpu = configs.cpu.replace(regex, `<span class="high-light">${this.value}</span>`)
+        const typegpu = configs.gpu.replace(regex, `<span class="high-light">${this.value}</span>`)
+        const typeprice = configs.price.replace(regex, `<span class="high-light">${this.value}</span>`)
+
+        return `
+        <li>
+            <span class="name">${typecpu}, ${typegpu} </span>
+            <span class="price">${typeprice},</span> 
+        </li>
+        `
+    }).join("")
+    suggestions.innerHTML = htmls
+}
+
+const searchinput = document.querySelector(".search")
+const suggestions = document.querySelector(".suggestions")
+
+searchinput.addEventListener("change", displaymatches)
+searchinput.addEventListener("keyup", displaymatches)
+
+
